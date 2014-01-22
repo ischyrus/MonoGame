@@ -61,17 +61,17 @@ namespace Microsoft.Xna.Framework
             window.KeyDown += CoreWindow_KeyDown;
             window.KeyUp += CoreWindow_KeyUp;
 
-            // if (inputElement != null)
-            // {
-            //     // If we have an input UIElement then we bind input events
-            //     // to it else we'll get events for overlapping XAML controls.
-            //     inputElement.PointerPressed += UIElement_PointerPressed;
-            //     inputElement.PointerReleased += UIElement_PointerReleased;
-            //     inputElement.PointerMoved += UIElement_PointerMoved;
-            //     inputElement.PointerWheelChanged += UIElement_PointerWheelChanged;
-            //     //inputElement.PointerExited += UIElement_PointerReleased;
-            // }
-            // else
+            if (inputElement != null)
+            {
+                // If we have an input UIElement then we bind input events
+                // to it else we'll get events for overlapping XAML controls.
+                inputElement.PointerPressed += UIElement_PointerPressed;
+                inputElement.PointerReleased += UIElement_PointerReleased;
+                inputElement.PointerMoved += UIElement_PointerMoved;
+                inputElement.PointerWheelChanged += UIElement_PointerWheelChanged;
+                //inputElement.PointerExited += UIElement_PointerReleased;
+            }
+            else
             {
                 // If we only have a CoreWindow then use it for input events.
                 window.PointerPressed += CoreWindow_PointerPressed;
