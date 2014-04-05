@@ -260,6 +260,10 @@
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\BlendFunction.cs" />
     <Compile Include="Graphics\States\BlendState.cs" />
+<<<<<<< Updated upstream
+=======
+    <Compile Include="Graphics\States\TargetBlendState.cs" />
+>>>>>>> Stashed changes
     <Compile Include="Graphics\GraphicsExtensions.cs" />
     <Compile Include="Graphics\Effect\IEffectFog.cs" />
     <Compile Include="Graphics\Effect\IEffectLights.cs" />
@@ -466,21 +470,7 @@
     </MonoDevelop>
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="Graphics\" />
-    <Folder Include="iOS\GamerServices\" />
-    <Folder Include="iOS\Input\" />
     <Folder Include="iOS\Audio\" />
-    <Folder Include="iOS\Media\" />
-    <Folder Include="iOS\Net\" />
-    <Folder Include="Graphics\Effect\Resources\" />
-    <Folder Include="iOS\Devices\" />
-    <Folder Include="iOS\Devices\Sensors\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ThirdParty\Lidgren.Network\Lidgren.Network.iOS.csproj">
-      <Project>{734EAA48-F1CA-481A-B391-0285BC0E8B40}</Project>
-      <Name>Lidgren.Network.iOS</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Graphics\Effect\Resources\AlphaTestEffect.ogl.mgfxo" />
@@ -489,5 +479,11 @@
     <EmbeddedResource Include="Graphics\Effect\Resources\EnvironmentMapEffect.ogl.mgfxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SkinnedEffect.ogl.mgfxo" />
     <EmbeddedResource Include="Graphics\Effect\Resources\SpriteEffect.ogl.mgfxo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ThirdParty\Lidgren.Network\Lidgren.Network.MacOS.csproj">
+      <Project>{221909a7-a91d-40c5-823a-39b402983a8c}</Project>
+      <Name>Lidgren.Network.MacOS</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

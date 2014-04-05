@@ -24,7 +24,8 @@ namespace Lidgren.Network
 		static NetAESEncryption()
 		{
 #if IS_FULL_NET_AVAILABLE
-			AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
+            //AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
+            Aes aes = Aes.Create();
 			List<int> temp = new List<int>();
 			foreach (KeySizes keysize in aes.LegalKeySizes)
 			{
@@ -121,8 +122,11 @@ namespace Lidgren.Network
 			{
 #if IS_FULL_NET_AVAILABLE
 				// nested usings are fun!
-				using (AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider { KeySize = m_bitSize, Mode = CipherMode.CBC })
+				using (Aes aesCryptoServiceProvider = Aes.Create()) //AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider { KeySize = m_bitSize, Mode = CipherMode.CBC })
 				{
+                    aesCryptoServiceProvider.KeySize = m_bitSize;
+                    aesCryptoServiceProvider.Mode = CipherMode.CBC;
+                   
 					using (ICryptoTransform cryptoTransform = aesCryptoServiceProvider.CreateEncryptor(m_key, m_iv))
 					{
 						using (MemoryStream memoryStream = new MemoryStream())
@@ -154,8 +158,11 @@ namespace Lidgren.Network
 			{
 #if IS_FULL_NET_AVAILABLE
 				// nested usings are fun!
-				using (AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider { KeySize = m_bitSize, Mode = CipherMode.CBC })
-				{
+                using (Aes aesCryptoServiceProvider = Aes.Create()) //AesCryptoServiceProvider aesCryptoServiceProvider = new AesCryptoServiceProvider { KeySize = m_bitSize, Mode = CipherMode.CBC })
+                {
+                    aesCryptoServiceProvider.KeySize = m_bitSize;
+                    aesCryptoServiceProvider.Mode = CipherMode.CBC;
+
 					using (ICryptoTransform cryptoTransform = aesCryptoServiceProvider.CreateDecryptor(m_key, m_iv))
 					{
 						using (MemoryStream memoryStream = new MemoryStream())

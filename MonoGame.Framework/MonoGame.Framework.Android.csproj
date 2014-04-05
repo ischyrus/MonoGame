@@ -42,6 +42,17 @@
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Prod-Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Prod-Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;ANDROID;GLES;GLSL;OPENGL</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
@@ -149,6 +160,10 @@
     <Compile Include="Graphics\Effect\EffectTechnique.cs" />
     <Compile Include="Graphics\Effect\EffectTechniqueCollection.cs" />
     <Compile Include="Graphics\States\BlendState.cs" />
+<<<<<<< Updated upstream
+=======
+    <Compile Include="Graphics\States\TargetBlendState.cs" />
+>>>>>>> Stashed changes
     <Compile Include="Graphics\States\BlendFunction.cs" />
     <Compile Include="Graphics\States\Blend.cs" />
     <Compile Include="Graphics\States\CompareFunction.cs" />
