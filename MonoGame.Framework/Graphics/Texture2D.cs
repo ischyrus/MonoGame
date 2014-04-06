@@ -75,6 +75,7 @@ using PixelInternalFormat = OpenTK.Graphics.ES20.All;
 using PixelType = OpenTK.Graphics.ES20.All;
 using PixelStoreParameter = OpenTK.Graphics.ES20.All;
 using ErrorCode = OpenTK.Graphics.ES20.All;
+using System.Drawing;
 #endif
 #elif PSM
 using PssTexture2D = Sce.PlayStation.Core.Graphics.Texture2D;
