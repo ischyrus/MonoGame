@@ -107,7 +107,12 @@ namespace Microsoft.Xna.Framework
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
 
             // Create a full-screen window
-            _mainWindow = new UIWindow (UIScreen.MainScreen.Bounds);
+            float toolbarThickness = 100; //50 * UIScreen.MainScreen.Scale;
+            System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (-1 * toolbarThickness, 
+                                                                              0, 
+                                                                              UIScreen.MainScreen.Bounds.Width - toolbarThickness, 
+                                                                              UIScreen.MainScreen.Bounds.Height);
+            _mainWindow = new UIWindow (bounds); // (UIScreen.MainScreen.Bounds);
 			//_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
 			
             game.Services.AddService (typeof(UIWindow), _mainWindow);
@@ -143,7 +148,6 @@ namespace Microsoft.Xna.Framework
 
             _displayLink.AddToRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
         }
-
 
         public override GameRunBehavior DefaultRunBehavior
         {
@@ -257,7 +261,7 @@ namespace Microsoft.Xna.Framework
 
         public override void Exit()
         {
-            // Do Nothing: iOS games do not "exit" or shut down.
+            _displayLink.RemoveFromRunLoop(NSRunLoop.Main, NSRunLoop.NSDefaultRunLoopMode);
         }
 
         private void BeginObservingUIApplication()
