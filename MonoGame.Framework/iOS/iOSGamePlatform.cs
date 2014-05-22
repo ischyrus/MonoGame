@@ -106,18 +106,18 @@ namespace Microsoft.Xna.Framework
 
             UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
 
+            _viewController = new iOSGameViewController(this);
+            UIInterfaceOrientation orientation = _viewController.InterfaceOrientation;
+
             // Create a full-screen window
-            float toolbarThickness = 100; //50 * UIScreen.MainScreen.Scale;
-            System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (-1 * toolbarThickness, 
+            float toolbarThickness = 100; 
+            System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (toolbarThickness * (orientation == UIInterfaceOrientation.LandscapeRight ? -1 : 1), // -1 * toolbarThickness, 
                                                                               0, 
                                                                               UIScreen.MainScreen.Bounds.Width - toolbarThickness, 
                                                                               UIScreen.MainScreen.Bounds.Height);
-            _mainWindow = new UIWindow (bounds); // (UIScreen.MainScreen.Bounds);
-			//_mainWindow.AutoresizingMask = UIViewAutoresizing.FlexibleDimensions;
-			
+            _mainWindow = new UIWindow (bounds);
+		
             game.Services.AddService (typeof(UIWindow), _mainWindow);
-
-            _viewController = new iOSGameViewController(this);
             game.Services.AddService (typeof(UIViewController), _viewController);
             Window = new iOSGameWindow (_viewController);
 
@@ -335,8 +335,7 @@ namespace Microsoft.Xna.Framework
 
 		private void ViewController_InterfaceOrientationChanged (object sender, EventArgs e)
 		{
-			var orientation = OrientationConverter.ToDisplayOrientation (
-				_viewController.InterfaceOrientation);
+			var orientation = OrientationConverter.ToDisplayOrientation (_viewController.InterfaceOrientation);
 
 			// FIXME: The presentation parameters for the GraphicsDevice should
 			//        be managed by the GraphicsDevice itself.  Not by
@@ -360,6 +359,16 @@ namespace Microsoft.Xna.Framework
                 gdm.ApplyChanges();
 			}
 			
+
+            float toolbarThickness = 100; 
+
+            if (_viewController.InterfaceOrientation == UIInterfaceOrientation.LandscapeRight) {
+                System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (_mainWindow.Bounds.X + (toolbarThickness * 2), 0, _mainWindow.Bounds.Width, _mainWindow.Bounds.Height);
+                _mainWindow.Bounds = bounds;
+            } else {
+                System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (_mainWindow.Bounds.X - (toolbarThickness * 2), 0, _mainWindow.Bounds.Width, _mainWindow.Bounds.Height);
+                _mainWindow.Bounds = bounds;
+            }
 		}
 
 		public override void BeginScreenDeviceChange (bool willBeFullScreen)
