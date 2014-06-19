@@ -39,35 +39,27 @@ purpose and non-infringement.
 #endregion License
 
 #region Using Statements
-using System;
-using System.Drawing;
-using System.Collections.Generic;
-using System.ComponentModel;
 using Android.Content;
 using Android.Content.PM;
-using Android.Content.Res;
-using Android.Util;
 using Android.Views;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using OpenTK.Platform.Android;
-
-using OpenTK;
-using OpenTK.Platform;
-using OpenTK.Graphics;
-using OpenTK.Graphics.ES20;
-
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.ES20;
+using OpenTK.Platform.Android;
+using System;
 #endregion Using Statements
 
 namespace Microsoft.Xna.Framework
 {
-	[CLSCompliant(false)]
-    public class AndroidGameWindow : AndroidGameView , Android.Views.View.IOnTouchListener, ISurfaceHolderCallback
+    [CLSCompliant(false)]
+    public class AndroidGameWindow : AndroidGameView, Android.Views.View.IOnTouchListener, ISurfaceHolderCallback
     {
-		private Rectangle clientBounds;
-		private Game _game;
+        private Rectangle clientBounds;
+        private Game _game;
         private DisplayOrientation supportedOrientations = DisplayOrientation.Default;
         private DisplayOrientation _currentOrientation;
         private AndroidTouchEventManager _touchManager = null;
@@ -86,15 +78,18 @@ namespace Microsoft.Xna.Framework
             _resumer = resumer;
         }
 
-        public AndroidGameWindow(Context context, Game game) : base(context)
+        public AndroidGameWindow(Context context, Game game)
+            : base(context)
         {
             _game = game;
-			Initialize();
-        }		
-						
+            Initialize();
+        }
+
         private void Initialize()
-        {            
-			clientBounds = new Rectangle(0, 0, Context.Resources.DisplayMetrics.WidthPixels, Context.Resources.DisplayMetrics.HeightPixels);
+        {
+            clientBounds = new Rectangle(0, 0,
+                                         Context.Resources.DisplayMetrics.WidthPixels,
+                                         Context.Resources.DisplayMetrics.HeightPixels);
 
             this.RequestFocus();
             this.FocusableInTouchMode = true;
@@ -105,12 +100,12 @@ namespace Microsoft.Xna.Framework
 	        GamePad.Initialize();
 #endif
         }
-		
-		protected override void OnLoad (EventArgs e)
-		{
-			base.OnLoad (e);			
-			MakeCurrent();
-		}
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            MakeCurrent();
+        }
 
         public override bool OnKeyDown(Keycode keyCode, KeyEvent e)
         {
@@ -141,7 +136,7 @@ namespace Microsoft.Xna.Framework
 			if (GamePad.OnKeyUp(keyCode, e))
 				return true;
 #endif
-			Keyboard.KeyUp(keyCode);
+            Keyboard.KeyUp(keyCode);
             return true;
         }
 
@@ -155,55 +150,58 @@ namespace Microsoft.Xna.Framework
 		}
 #endif
 
-		protected override void CreateFrameBuffer()
-		{
+        protected override void CreateFrameBuffer()
+        {
             Android.Util.Log.Debug("MonoGame", "AndroidGameWindow.CreateFrameBuffer");
-			try
+            try
             {
-				GLContextVersion = GLContextVersion.Gles2_0;
-				try
-				{
-					int depth = 0;
-					int stencil = 0;
-					switch (this._game.graphicsDeviceManager.PreferredDepthStencilFormat)
-					{
-						case DepthFormat.Depth16: 
-						depth = 16;
-						break;
-						case DepthFormat.Depth24:
-						depth = 24;
-						break;
-						case DepthFormat.Depth24Stencil8: 
-						depth = 24;
-						stencil = 8;
-						break;
-						case DepthFormat.None: break;
-					}
-					Android.Util.Log.Debug("MonoGame", string.Format("Creating Color:Default Depth:{0} Stencil:{1}", depth, stencil));
-					GraphicsMode = new AndroidGraphicsMode(new ColorFormat(8,8,8,8), depth,stencil, 0, 0, false);
-					base.CreateFrameBuffer();
-				}
-				catch(Exception)
-				{
-					Android.Util.Log.Debug("MonoGame", "Failed to create desired format, falling back to defaults");
-					// try again using a more basic mode with a 16 bit depth buffer which hopefully the device will support 
-					GraphicsMode = new AndroidGraphicsMode(new ColorFormat(0, 0, 0, 0), 16, 0, 0, 0, false);
-					try {
-						base.CreateFrameBuffer();
-					} catch (Exception) {
-						// ok we are right back to getting the default
-						GraphicsMode = new AndroidGraphicsMode(0, 0, 0, 0, 0, false);
-						base.CreateFrameBuffer();
-					}
-				}
-				Android.Util.Log.Debug("MonoGame", "Created format {0}", this.GraphicsContext.GraphicsMode);
+                GLContextVersion = GLContextVersion.Gles2_0;
+                try
+                {
+                    int depth = 0;
+                    int stencil = 0;
+                    switch (this._game.graphicsDeviceManager.PreferredDepthStencilFormat)
+                    {
+                        case DepthFormat.Depth16:
+                            depth = 16;
+                            break;
+                        case DepthFormat.Depth24:
+                            depth = 24;
+                            break;
+                        case DepthFormat.Depth24Stencil8:
+                            depth = 24;
+                            stencil = 8;
+                            break;
+                        case DepthFormat.None: break;
+                    }
+                    Android.Util.Log.Debug("MonoGame", string.Format("Creating Color:Default Depth:{0} Stencil:{1}", depth, stencil));
+                    GraphicsMode = new AndroidGraphicsMode(new ColorFormat(8, 8, 8, 8), depth, stencil, 0, 0, false);
+                    base.CreateFrameBuffer();
+                }
+                catch (Exception)
+                {
+                    Android.Util.Log.Debug("MonoGame", "Failed to create desired format, falling back to defaults");
+                    // try again using a more basic mode with a 16 bit depth buffer which hopefully the device will support 
+                    GraphicsMode = new AndroidGraphicsMode(new ColorFormat(0, 0, 0, 0), 16, 0, 0, 0, false);
+                    try
+                    {
+                        base.CreateFrameBuffer();
+                    }
+                    catch (Exception)
+                    {
+                        // ok we are right back to getting the default
+                        GraphicsMode = new AndroidGraphicsMode(0, 0, 0, 0, 0, false);
+                        base.CreateFrameBuffer();
+                    }
+                }
+                Android.Util.Log.Debug("MonoGame", "Created format {0}", this.GraphicsContext.GraphicsMode);
                 All status = GL.CheckFramebufferStatus(All.Framebuffer);
                 Android.Util.Log.Debug("MonoGame", "Framebuffer Status: " + status.ToString());
-            } 
-			catch (Exception) 
-			{
-				throw new NotSupportedException("Could not create OpenGLES 2.0 frame buffer");
-		    }
+            }
+            catch (Exception)
+            {
+                throw new NotSupportedException("Could not create OpenGLES 2.0 frame buffer");
+            }
             if (_game.GraphicsDevice != null && _contextWasLost)
             {
                 _game.GraphicsDevice.Initialize();
@@ -234,14 +232,14 @@ namespace Microsoft.Xna.Framework
             }
 
             MakeCurrent();
-		}
+        }
 
         protected override void DestroyFrameBuffer()
         {
             // DeviceResetting events
             _game.graphicsDeviceManager.OnDeviceResetting(EventArgs.Empty);
-			if(_game.GraphicsDevice != null) 
-				_game.GraphicsDevice.OnDeviceResetting();
+            if (_game.GraphicsDevice != null)
+                _game.GraphicsDevice.OnDeviceResetting();
 
             Android.Util.Log.Debug("MonoGame", "AndroidGameWindow.DestroyFrameBuffer");
 
@@ -277,24 +275,24 @@ namespace Microsoft.Xna.Framework
             if (_game != null)
             {
                 if (!_isResuming && _game.Platform.IsActive && !ScreenReceiver.ScreenLocked) //Only call draw if an update has occured
-				{
-					_game.Tick();
-				}
-				else if (_game.GraphicsDevice != null)
-				{
-					_game.GraphicsDevice.Clear(Color.Black);
+                {
+                    _game.Tick();
+                }
+                else if (_game.GraphicsDevice != null)
+                {
+                    _game.GraphicsDevice.Clear(Color.Black);
                     if (_isResuming && _resumer != null)
                     {
                         _resumer.Draw();
                     }
-					_game.Platform.Present();
-				}
+                    _game.Platform.Present();
+                }
             }
         }
-		
-		#endregion
-		
-		
+
+        #endregion
+
+
         internal void SetSupportedOrientations(DisplayOrientation orientations)
         {
             supportedOrientations = orientations;
@@ -358,53 +356,53 @@ namespace Microsoft.Xna.Framework
                 _game.graphicsDeviceManager.ApplyChanges();
         }
 
-		#region IOnTouchListener implementation
-		public bool OnTouch (View v, MotionEvent e)
+        #region IOnTouchListener implementation
+        public bool OnTouch(View v, MotionEvent e)
         {
-			return OnTouchEvent(e);
-            }
-		#endregion
+            return OnTouchEvent(e);
+        }
+        #endregion
 
         public override bool OnTouchEvent(MotionEvent e)
         {
             _touchManager.OnTouchEvent(e);
             return true;
         }
-        
-        public string ScreenDeviceName 
-		{
-			get 
-			{
-				throw new System.NotImplementedException ();
-			}
-		}
-   
 
-        public Rectangle ClientBounds 
-		{
-			get 
-			{
-				return clientBounds;
-			}
+        public string ScreenDeviceName
+        {
+            get
+            {
+                throw new System.NotImplementedException();
+            }
+        }
+
+
+        public Rectangle ClientBounds
+        {
+            get
+            {
+                return clientBounds;
+            }
             internal set
             {
                 clientBounds = value;
                 //if(ClientSizeChanged != null)
                 //    ClientSizeChanged(this, EventArgs.Empty);
             }
-		}
-		
-		public bool AllowUserResizing 
-		{
-			get 
-			{
-				return false;
-			}
-			set 
-			{
-				// Do nothing; Ignore rather than raising and exception
-			}
-		}
+        }
+
+        public bool AllowUserResizing
+        {
+            get
+            {
+                return false;
+            }
+            set
+            {
+                // Do nothing; Ignore rather than raising and exception
+            }
+        }
 
         // A copy of ScreenOrientation from Android 2.3
         // This allows us to continue to support 2.2 whilst
@@ -425,8 +423,8 @@ namespace Microsoft.Xna.Framework
             FullSensor = 10,
         }
 
-		public DisplayOrientation CurrentOrientation 
-		{
+        public DisplayOrientation CurrentOrientation
+        {
             get
             {
                 return _currentOrientation;
@@ -509,11 +507,11 @@ namespace Microsoft.Xna.Framework
                     }
                 }
             }
-		}
+        }
 
         public event EventHandler<EventArgs> OrientationChanged;
-		public event EventHandler ClientSizeChanged;
-		public event EventHandler ScreenDeviceNameChanged;
+        public event EventHandler ClientSizeChanged;
+        public event EventHandler ScreenDeviceNameChanged;
 
 
         void ISurfaceHolderCallback.SurfaceChanged(ISurfaceHolder holder, Android.Graphics.Format format, int width, int height)

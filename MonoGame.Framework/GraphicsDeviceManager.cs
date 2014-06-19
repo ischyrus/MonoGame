@@ -45,7 +45,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 #if MONOMAC
 using MonoMac.OpenGL;
 #elif GLES
-using OpenTK.Graphics.ES20;
+
 #elif OPENGL
 using OpenTK.Graphics.OpenGL;
 #elif WINDOWS_STOREAPP
@@ -443,10 +443,10 @@ namespace Microsoft.Xna.Framework
         internal void ForceSetFullScreen()
         {
             if (IsFullScreen)
-			{
-				Game.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
+            {
+                Game.Activity.Window.ClearFlags(Android.Views.WindowManagerFlags.ForceNotFullscreen);
                 Game.Activity.Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
-			}
+            }
             else
                 Game.Activity.Window.SetFlags(WindowManagerFlags.ForceNotFullscreen, WindowManagerFlags.ForceNotFullscreen);
         }
@@ -563,10 +563,12 @@ namespace Microsoft.Xna.Framework
         internal void ResetClientBounds()
         {
 #if ANDROID
+            float topMargin = 100f;
+
             float preferredAspectRatio = (float)PreferredBackBufferWidth /
-                                         (float)PreferredBackBufferHeight;
-            float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width / 
-                                       (float)GraphicsDevice.DisplayMode.Height;
+                                         ((float)PreferredBackBufferHeight);
+            float displayAspectRatio = (float)GraphicsDevice.DisplayMode.Width /
+                                       ((float)GraphicsDevice.DisplayMode.Height);
 
             float adjustedAspectRatio = preferredAspectRatio;
 
@@ -600,6 +602,8 @@ namespace Microsoft.Xna.Framework
                 newClientBounds.Width = GraphicsDevice.DisplayMode.Width;
                 newClientBounds.Height = GraphicsDevice.DisplayMode.Height;
             }
+
+            newClientBounds.Height = GraphicsDevice.DisplayMode.Height - (int)(topMargin * Android.App.Application.Context.Resources.DisplayMetrics.Density);
 
             // Ensure buffer size is reported correctly
             _graphicsDevice.PresentationParameters.BackBufferWidth = newClientBounds.Width;
