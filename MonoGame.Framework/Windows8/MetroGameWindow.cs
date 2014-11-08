@@ -39,24 +39,34 @@ purpose and non-infringement.
 #endregion License
 
 using System;
+using System.ComponentModel;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using Microsoft.Xna.Framework.Graphics;
-using Windows.Graphics.Display;
+
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.Graphics.Display;
+
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Microsoft.Xna.Framework
 {
-    [CLSCompliant(false)]
-    public partial class MetroGameWindow : GameWindow
+    partial class MetroGameWindow : GameWindow
     {
         private DisplayOrientation _supportedOrientations;
         private DisplayOrientation _orientation;
         private CoreWindow _coreWindow;
         private Rectangle _clientBounds;
+#if !WINDOWS_PHONE81
         private ApplicationViewState _currentViewState;
+#endif
         private InputEvents _windowEvents;
+
+
         private Vector2 _backBufferScale;
 
         #region Internal Properties
@@ -78,7 +88,7 @@ namespace Microsoft.Xna.Framework
         public override bool AllowUserResizing
         {
             get { return false; }
-            set
+            set 
             {
                 // You cannot resize a Metro window!
             }
@@ -89,15 +99,7 @@ namespace Microsoft.Xna.Framework
             get { return _orientation; }
         }
 
-        private MetroGamePlatform Platform
-        {
-            get
-            {
-                if (Game.Instance != null)
-                    return Game.Instance.Platform as MetroGamePlatform;
-                return null;
-            }
-        }
+        private MetroGamePlatform Platform { get { return Game.Instance.Platform as MetroGamePlatform; } }
 
         protected internal override void SetSupportedOrientations(DisplayOrientation orientations)
         {
@@ -105,9 +107,9 @@ namespace Microsoft.Xna.Framework
             // when no preference is being changed.
             if (_supportedOrientations == orientations)
                 return;
-
+            
             _supportedOrientations = orientations;
-
+            
             DisplayOrientations supported;
             if (orientations == DisplayOrientation.Default)
             {
@@ -145,21 +147,17 @@ namespace Microsoft.Xna.Framework
             _coreWindow.Closed += Window_Closed;
 
             _coreWindow.Activated += Window_FocusChanged;
-
+#if !WINDOWS_PHONE81
             _currentViewState = ApplicationView.Value;
-
+#endif
             var bounds = _coreWindow.Bounds;
             SetClientBounds(bounds.Width, bounds.Height);
 
             SetCursor(false);
-            IsExiting = false;
         }
 
         private void Window_FocusChanged(CoreWindow sender, WindowActivatedEventArgs args)
         {
-            if (this.Platform == null)
-                return;
-
             if (args.WindowActivationState == CoreWindowActivationState.Deactivated)
                 Platform.IsActive = false;
             else
@@ -168,7 +166,8 @@ namespace Microsoft.Xna.Framework
 
         private void Window_Closed(CoreWindow sender, CoreWindowEventArgs args)
         {
-            Game.Exit();
+            Game.SuppressDraw();
+            Game.Platform.Exit();
         }
 
         private void SetClientBounds(double width, double height)
@@ -200,7 +199,7 @@ namespace Microsoft.Xna.Framework
                     clientWidth = (float)Math.Min(_clientBounds.Width, _clientBounds.Height);
                     clientHeight = (float)Math.Max(_clientBounds.Width, _clientBounds.Height);
                 }
-                _backBufferScale = new Vector2(manager.PreferredBackBufferWidth / clientWidth,
+                _backBufferScale = new Vector2( manager.PreferredBackBufferWidth / clientWidth, 
                                                 manager.PreferredBackBufferHeight / clientHeight);
             }
 
@@ -209,13 +208,13 @@ namespace Microsoft.Xna.Framework
 
             // Set the default new back buffer size and viewport, but this
             // can be overloaded by the two events below.
-
+            
             var newWidth = (int)((_backBufferScale.X * _clientBounds.Width) + 0.5f);
             var newHeight = (int)((_backBufferScale.Y * _clientBounds.Height) + 0.5f);
             manager.PreferredBackBufferWidth = newWidth;
             manager.PreferredBackBufferHeight = newHeight;
-
-            manager.GraphicsDevice.Viewport = new Viewport(0, 0, newWidth, newHeight);
+            if(manager.GraphicsDevice!=null)
+            manager.GraphicsDevice.Viewport = new Viewport(0, 0, newWidth, newHeight);            
 
             // If we have a valid client bounds then 
             // update the graphics device.
@@ -225,7 +224,9 @@ namespace Microsoft.Xna.Framework
             // Set the new view state which will trigger the 
             // Game.ApplicationViewChanged event and signal
             // the client size changed event.
+#if !WINDOWS_PHONE81
             Platform.ViewState = ApplicationView.Value;
+#endif
             OnClientSizeChanged();
         }
 
@@ -280,7 +281,7 @@ namespace Microsoft.Xna.Framework
 
         internal void SetCursor(bool visible)
         {
-            if (_coreWindow == null)
+            if ( _coreWindow == null )
                 return;
 
             if (visible)
@@ -318,7 +319,7 @@ namespace Microsoft.Xna.Framework
             _windowEvents.UpdateState();
 
             // Update and render the game.
-            if (Game != null && !this.IsExiting)
+            if (Game != null)
                 Game.Tick();
         }
 
@@ -340,7 +341,7 @@ namespace Microsoft.Xna.Framework
 
         #endregion
     }
-
+#if !WINDOWS_PHONE81
     [CLSCompliant(false)]
     public class ViewStateChangedEventArgs : EventArgs
     {
@@ -351,5 +352,6 @@ namespace Microsoft.Xna.Framework
             ViewState = newViewstate;
         }
     }
+#endif
 }
 

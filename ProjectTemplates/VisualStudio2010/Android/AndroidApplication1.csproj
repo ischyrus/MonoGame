@@ -18,7 +18,7 @@
     <AndroidSupportedAbis>armeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
-    <TargetFrameworkVersion>v2.3</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,7 +50,7 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="MonoGame.Framework">
-       <HintPath>$(MSBuildExtensionsPath)\..\MonoGame\v3.0\Assemblies\Android\MonoGame.Framework.dll</HintPath>
+       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Android\MonoGame.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
