@@ -105,17 +105,18 @@ namespace Microsoft.Xna.Framework
 
             _applicationObservers = new List<NSObject>();
 
-            UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
+			UIApplication.SharedApplication.SetStatusBarHidden(true, UIStatusBarAnimation.Fade);
 
-            _viewController = new iOSGameViewController(this);
+			float toolbarThickness = 100; 
+			System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (0,  
+																		      toolbarThickness / 2f, 
+																		      UIScreen.MainScreen.Bounds.Width, 
+																		      UIScreen.MainScreen.Bounds.Height - toolbarThickness);
+
+			_viewController = new iOSGameViewController(this, bounds);
             UIInterfaceOrientation orientation = _viewController.InterfaceOrientation;
 
             // Create a full-screen window
-            float toolbarThickness = 100; 
-            System.Drawing.RectangleF bounds = new System.Drawing.RectangleF (toolbarThickness * (orientation == UIInterfaceOrientation.LandscapeRight ? -1 : 1), // -1 * toolbarThickness, 
-                                                                              0, 
-                                                                              UIScreen.MainScreen.Bounds.Width - toolbarThickness, 
-                                                                              UIScreen.MainScreen.Bounds.Height);
             _mainWindow = new UIWindow (bounds);
 		
             game.Services.AddService (typeof(UIWindow), _mainWindow);

@@ -13,13 +13,15 @@ namespace Microsoft.Xna.Framework
     class iOSGameViewController : UIViewController
     {
         iOSGamePlatform _platform;
+		RectangleF desiredBounds;
 
-        public iOSGameViewController(iOSGamePlatform platform)
+		public iOSGameViewController(iOSGamePlatform platform, RectangleF desiredBounds)
         {
             if (platform == null)
                 throw new ArgumentNullException("platform");
             _platform = platform;
             SupportedOrientations = DisplayOrientation.Default;
+			this.desiredBounds = desiredBounds;
         }
 
         public event EventHandler<EventArgs> InterfaceOrientationChanged;
@@ -41,7 +43,7 @@ namespace Microsoft.Xna.Framework
                 // iOS 8+ reports resolution correctly in all cases
                 if (InterfaceOrientation == UIInterfaceOrientation.LandscapeLeft || InterfaceOrientation == UIInterfaceOrientation.LandscapeRight)
                 {
-                    frame = new RectangleF(0, 0, Math.Max(screen.Bounds.Width, screen.Bounds.Height), Math.Min(screen.Bounds.Width, screen.Bounds.Height));
+					frame = this.desiredBounds; // new RectangleF(0, 0, Math.Max(screen.Bounds.Width, screen.Bounds.Height), Math.Min(screen.Bounds.Width, screen.Bounds.Height));
                 }
                 else
                 {
